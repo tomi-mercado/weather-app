@@ -8,6 +8,14 @@ interface Coordinate {
   longitude: number;
 }
 
+interface WeatherCity {
+  name: string;
+  max: number;
+  min: number;
+  humidity: number;
+  icon: string;
+}
+
 const coordinates: Array<Coordinate> = [
   {
     latitude: -34.603722,
@@ -31,29 +39,19 @@ const apiRoute = 'http://localhost:8010/proxy';
 
 function App() {
   
-  //TODO: type this
-  const [weatherCities, setWeatherCities] = useState<Array<any>>([]);
+  const [weatherCities, setWeatherCities] = useState<Array<WeatherCity>>([]);
   const [currentCityIndex, setCurrentCityIndex] = useState(0);
   const [errorLoading, setErrorLoading] = useState(false);
 
-  const getByLattLong = async (lat, lon) => axios.get(`${apiRoute}/location/search/?lattlong=${lat},${lon}`, {
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
-  const getByWoeid = (woeid: number) => axios.get(`${apiRoute}/location/${woeid}`, {
-    headers: {
-      'Access-Control-Allow-Origin': '*'
-    }
-  });
-  const haveWeatherCitiesLoaded = weatherCities.length > 0;
+  const getByLattLong = async (lat: number, lon: number) => axios.get(`${apiRoute}/location/search/?lattlong=${lat},${lon}`);
+  const getWeatherByWoeid = (woeid: number) => axios.get(`${apiRoute}/location/${woeid}`);
+  const haveWeatherCitiesLoaded: boolean = weatherCities.length > 0;
 
   useEffect(() => {
     Promise.all(coordinates.map(async ({ latitude, longitude }) => {
-      //TODO: type this
       const responseCitySearch = await getByLattLong(latitude, longitude);
       const cityFound = responseCitySearch.data[0];
-      const responseWeatherCity = await getByWoeid(cityFound.woeid);
+      const responseWeatherCity = await getWeatherByWoeid(cityFound.woeid);
       const weatherCity = responseWeatherCity.data;
       const currentWeatherCity = weatherCity.consolidated_weather[0];
       return {
@@ -64,8 +62,8 @@ function App() {
         icon: `https://www.metaweather.com/static/img/weather/${currentWeatherCity.weather_state_abbr}.svg`
       };
     }))
-    .then((result) => setWeatherCities(result))
-    .catch((_error) => setErrorLoading(true))
+      .then((result: Array<WeatherCity>) => setWeatherCities(result))
+      .catch((_error) => setErrorLoading(true))
   }, []);
 
   useEffect(() => {
