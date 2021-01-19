@@ -20,9 +20,9 @@ router.get('/coordinates/:lattlong', async (req, res) => {
                     const weatherCity = responseWeatherCity.data.consolidated_weather[0];
                     return res.status(200).json({
                         name: cityFound.title,
-                        max: weatherCity.max_temp,
-                        min: weatherCity.min_temp,
-                        humidity: weatherCity.humidity,
+                        max: Math.round(weatherCity.max_temp),
+                        min: Math.round(weatherCity.min_temp),
+                        humidity: Math.round(weatherCity.humidity),
                         icon: `https://www.metaweather.com/static/img/weather/${weatherCity.weather_state_abbr}.svg`,
                     });
                 } 
@@ -31,6 +31,32 @@ router.get('/coordinates/:lattlong', async (req, res) => {
             return res.status(400).json({ error: "Can't found this city" });
         }
         return res.status(400).json({ error: "Error in params. You have to get /coordinates/lat,long" });
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+});
+
+router.get('/:name', async (req, res) => {
+    const { name } = req.params;
+    try {
+        const responseSearchCity = await axios.get(`${weatherApiRoute}/location/search/?query=${name}`);
+        if (responseSearchCity.status === 200) {
+            const { data } = responseSearchCity;
+            const newCity = data[0];
+            const responseWeatherCity = await axios.get(`${weatherApiRoute}/location/${newCity.woeid}`);
+            if (responseWeatherCity.status === 200) {
+                const weatherCity = responseWeatherCity.data.consolidated_weather[0];
+                return res.status(200).json({
+                    name: newCity.title,
+                    max: Math.round(weatherCity.max_temp),
+                    min: Math.round(weatherCity.min_temp),
+                    humidity: Math.round(weatherCity.humidity),
+                    icon: `https://www.metaweather.com/static/img/weather/${weatherCity.weather_state_abbr}.svg`
+                });
+            }
+            return res.status.json({ error: "Can't found the weather for this city" });
+        }
+        return res.status(400).json({ error: "Can't found this city" });
     } catch (error) {
         return res.status(400).json({ error: error.message });
     }
