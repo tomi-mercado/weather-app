@@ -42,7 +42,7 @@ function App() {
     if (haveWeatherCitiesLoaded) {
       const interval = setInterval(() => {
         setCurrentCityIndex(currentIndex => currentIndex !== weatherCities.length - 1 ? currentCityIndex + 1 : 0);
-      }, 1000);
+      }, 10000);
       return () => clearInterval(interval);
     }
   }, [currentCityIndex, haveWeatherCitiesLoaded, weatherCities.length]);

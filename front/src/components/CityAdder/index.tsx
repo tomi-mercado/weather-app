@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 
 import styles from './styles';
 import { WeatherCity } from '../../interfaces';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(styles);
 
@@ -47,6 +48,7 @@ function CityAdder({ weatherCities, setWeatherCity }: { weatherCities: Array<Wea
         <Button variant="contained" onClick={addCity}>Add</Button>
         {resultAdding && <h5>City successfully added</h5>}
         {resultAdding === false && <h5>We couldn't find this city</h5>}
+        <Typography className={classes.aclaration} variant="subtitle2">*Please, enter the city in English.</Typography>
     </div>
   )
 }

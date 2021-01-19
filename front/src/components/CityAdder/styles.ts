@@ -7,7 +7,12 @@ const styles = (theme: Theme) => createStyles({
         flexDirection: 'column',
         justifyContent: 'center',
         textAlign: 'center',
+        marginTop: '2rem',
     },
+    aclaration: {
+        marginTop: '2rem',
+        fontSize: '12px',
+    }
 })
 
 export default styles;
