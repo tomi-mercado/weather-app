@@ -1,5 +1,5 @@
 # weather-app
- -Add `.env` file on /api
+ - Add `.env` file on /api
  ```
 WEATHER_API_ROUTE="https://www.metaweather.com/api"
 FRONTEND_URL=frontend route (default 3000)
@@ -13,11 +13,11 @@ lcp --proxyUrl https://www.metaweather.com/api
 ```
 This return a message with a port. Then replace `WEATHER_API_ROUTE` with the value `http://localhost:{bash_port}/proxy`
 
-Add `.env` file on /front
+- Add `.env` file on /front
 ```
 REACT_APP_BACKEND_URL=backend route (default 3001)
 ```
 
-To run this project run yarn start inside /api folder and inside /front folder.
+- Run this project running `yarn start` inside /api folder and inside /front folder.
 
 This project was realized with Create React App with the Typescript template and Material-ui to create the frontend, and Express to create the api.
