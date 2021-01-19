@@ -1,7 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import axios from 'axios';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import { Button, TextField } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 import styles from './styles';
 import { WeatherCity } from '../../interfaces';
@@ -15,9 +16,16 @@ function CityAdder({ weatherCities, setWeatherCity }: { weatherCities: Array<Wea
   const classes = useStyles();
 
   const [inputValue, setInputValue] = useState<string>('');
-  const [resultAdding, setResultAdding] = useState<boolean>(null);
+  const [resultAdding, setResultAdding] = useState<boolean | null>(null);
 
   const handleInput = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setInputValue(event.target.value);
+
+  const handleResult = (value: boolean) => {
+    setResultAdding(value);
+    setTimeout(() => {
+      setResultAdding(null);
+    }, 3000);
+  }
 
   const addCity = async () => {
     try {
@@ -35,12 +43,12 @@ function CityAdder({ weatherCities, setWeatherCity }: { weatherCities: Array<Wea
                     humidity: Math.round(weather.humidity),
                     icon: `https://www.metaweather.com/static/img/weather/${weather.weather_state_abbr}.svg`
                 }]);
-                setResultAdding(true);
+                handleResult(true);
             }
-            else setResultAdding(false);
-        } else setResultAdding(false);
+            else handleResult(false);
+        } else handleResult(false);
     } catch (error) {
-        setResultAdding(false);
+        handleResult(false);
     } 
   }
 
