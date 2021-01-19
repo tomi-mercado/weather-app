@@ -3,39 +3,10 @@ import axios from 'axios';
 
 import CityCard from './components/CityCard';
 
-interface Coordinate {
-  latitude: number;
-  longitude: number;
-}
+import coordinates from './coordinates';
+import { WeatherCity } from './interfaces';
 
-interface WeatherCity {
-  name: string;
-  max: number;
-  min: number;
-  humidity: number;
-  icon: string;
-}
-
-const coordinates: Array<Coordinate> = [
-  {
-    latitude: -34.603722,
-    longitude: -58.381592,
-  },
-  {
-    latitude: -33.459229,
-    longitude: -70.645348,
-  },
-  {
-    latitude: 40.730610,
-    longitude: -73.935242,
-  },
-  {
-    latitude: 37.58,
-    longitude: -47.35,
-  },
-];
-
-const apiRoute = 'http://localhost:8010/proxy';
+const apiRoute = process.env.REACT_APP_BACKEND_URL;
 
 function App() {
   
