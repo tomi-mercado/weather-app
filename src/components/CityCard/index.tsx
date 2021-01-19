@@ -15,9 +15,15 @@ interface CityCardsProps {
     humidity: number;
 }
 
+interface WeatherPropertyProps {
+    name: string;
+    value: number;
+    symbol?: string;
+}
+
 const useStyles = makeStyles(styles);
 
-const WeatherProperty = ({ name, value }: { name: string; value: number; }) => <Typography variant="subtitle1"><b>{name}:</b> {value}°</Typography>
+const WeatherProperty = ({ name, value, symbol }: WeatherPropertyProps) => <Typography variant="subtitle1"><b>{name}:</b> {value}{symbol || '°'}</Typography>
 
 function CityCard({
     name,
@@ -31,14 +37,16 @@ function CityCard({
 
     return (
         <Card className={classes.root}>
-            <div>
-                <Typography variant="h3">{name}</Typography>
-                <WeatherProperty name="Max" value={max}/>
-                <WeatherProperty name="Min" value={min}/>
-                <WeatherProperty name="Humidity" value={humidity}/>
-            </div>
-            <div>
-                <img className={classes.image} src={icon} alt="weather description"/>
+            <Typography variant="h3">{name}</Typography>
+            <div className={classes.weatherInfoWrapper}>
+                <div>
+                    <WeatherProperty name="Max" value={max}/>
+                    <WeatherProperty name="Min" value={min}/>
+                    <WeatherProperty name="Humidity" value={humidity} symbol="%"/>
+                </div>
+                <div>
+                    <img className={classes.image} src={icon} alt="weather description"/>
+                </div>
             </div>
         </Card>
     )

@@ -2,11 +2,15 @@ import createStyles from '@material-ui/core/styles/createStyles';
 
 const styles = createStyles({
     root: {
+        width: '40%',
+        padding: '1.5rem',
+        textAlign: 'center',
+    },
+    weatherInfoWrapper: {
+        marginTop: '1.5rem',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        width: '40%',
-        padding: '1.5rem',
     },
     image: {
         width: '4rem',
