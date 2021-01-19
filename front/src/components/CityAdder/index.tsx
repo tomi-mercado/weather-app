@@ -29,23 +29,12 @@ function CityAdder({ weatherCities, setWeatherCity }: { weatherCities: Array<Wea
 
   const addCity = async () => {
     try {
-        const responseSearchCity = await axios.get(`${apiRoute}/location/search/?query=${inputValue}`);
-        if (responseSearchCity.status === 200) {
-            const { data } = responseSearchCity;
-            const newCity = data[0];
-            const responseWeatherCity = await axios.get(`${apiRoute}/location/${newCity.woeid}`);
-            if (responseWeatherCity.status === 200) {
-                const weather = responseWeatherCity.data.consolidated_weather[0];
-                setWeatherCity([...weatherCities, {
-                    name: newCity.title,
-                    max: Math.round(weather.max_temp),
-                    min: Math.round(weather.min_temp),
-                    humidity: Math.round(weather.humidity),
-                    icon: `https://www.metaweather.com/static/img/weather/${weather.weather_state_abbr}.svg`
-                }]);
-                handleResult(true);
-            }
-            else handleResult(false);
+        const response = await axios.get(`${apiRoute}/cities/${inputValue}`);
+        if (response.status === 200) {
+            const { data } = response;
+            const newCityWeather: WeatherCity = data;
+            setWeatherCity([...weatherCities, newCityWeather]);
+            handleResult(true);
         } else handleResult(false);
     } catch (error) {
         handleResult(false);

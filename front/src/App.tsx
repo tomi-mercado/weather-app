@@ -21,24 +21,18 @@ function App() {
   const [currentCityIndex, setCurrentCityIndex] = useState(0);
   const [errorLoading, setErrorLoading] = useState(false);
 
-  const getByLattLong = async (lat: number, lon: number) => axios.get(`${apiRoute}/location/search/?lattlong=${lat},${lon}`);
-  const getWeatherByWoeid = (woeid: number) => axios.get(`${apiRoute}/location/${woeid}`);
   const haveWeatherCitiesLoaded: boolean = weatherCities.length > 0;
 
   useEffect(() => {
     Promise.all(coordinates.map(async ({ latitude, longitude }) => {
-      const responseCitySearch = await getByLattLong(latitude, longitude);
-      const cityFound = responseCitySearch.data[0];
-      const responseWeatherCity = await getWeatherByWoeid(cityFound.woeid);
-      const weatherCity = responseWeatherCity.data;
-      const currentWeatherCity = weatherCity.consolidated_weather[0];
-      return {
-        name: cityFound.title,
-        max: Math.round(currentWeatherCity.max_temp),
-        min: Math.round(currentWeatherCity.min_temp),
-        humidity: Math.round(currentWeatherCity.humidity),
-        icon: `https://www.metaweather.com/static/img/weather/${currentWeatherCity.weather_state_abbr}.svg`
-      };
+      const response = await axios.get(`${apiRoute}/cities/coordinates/${latitude},${longitude}`);
+      if (response.status === 200) {
+        const { data } = response;
+        const weatherCity: WeatherCity = data;
+        return weatherCity;
+      } else {
+        setErrorLoading(true);
+      }
     }))
       .then((result: Array<WeatherCity>) => setWeatherCities(result))
       .catch((_error) => setErrorLoading(true))
