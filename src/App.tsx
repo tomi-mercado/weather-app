@@ -3,6 +3,7 @@ import axios from 'axios';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import CityCard from './components/CityCard';
+import CityAdder from './components/CityAdder';
 
 import coordinates from './coordinates';
 import styles from './styles';
@@ -46,12 +47,8 @@ function App() {
   useEffect(() => {
     if (haveWeatherCitiesLoaded) {
       const interval = setInterval(() => {
-        setCurrentCityIndex(currentIndex => {
-          console.log("Current index", currentIndex)
-          console.log("Length", weatherCities.length)
-          return currentIndex !== weatherCities.length - 1 ? currentCityIndex + 1 : 0
-        });
-      }, 10000);
+        setCurrentCityIndex(currentIndex => currentIndex !== weatherCities.length - 1 ? currentCityIndex + 1 : 0);
+      }, 1000);
       return () => clearInterval(interval);
     }
   }, [currentCityIndex, haveWeatherCitiesLoaded, weatherCities.length]);
@@ -66,6 +63,10 @@ function App() {
           min={currentCity.min}
           humidity={currentCity.humidity}
           icon={currentCity.icon}
+        />
+        <CityAdder
+          setWeatherCity={setWeatherCities}
+          weatherCities={weatherCities}
         />
     </div>
   );
